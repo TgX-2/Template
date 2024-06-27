@@ -36,7 +36,11 @@ struct SegmentTreeLazy {
     }
 
     int get(int id, int l, int r, int u, int v, int f(int, int)) {
-        if (v < l or r < u) return 0;
+        if (v < l or r < u) {
+            if (f(1, 0)) return intmin;
+            else if (f(1, 0) == 0) return intmax;
+            else return 0;
+        }
         if (u <= l and r <= v) return seg[id].val;
         down(id);
         int mid = (l + r) >> 1;

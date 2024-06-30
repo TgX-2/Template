@@ -1,17 +1,15 @@
-struct Matrix {
+template<class T> class Matrix {
+private: 
     int n, m;
-    vector <vector <int> > x;
-    vector<int> & operator[] (int i) { return x[i]; }
-    const vector<int> & operator[] (int i) const { return x[i]; }
+    vector <vector <T> > x;
 
-    /*    Matrix mat(n, m)    */
-    Matrix(int r, int c) : x(r, vector <int> (c)), n(r), m(c) {} 
+public: 
+    vector<T> & operator[] (int i) { return x[i]; }
+    const vector<T> & operator[] (int i) const { return x[i]; }
 
-    /*    Matrix mat({...}, ..., {...})    */
-    Matrix(const vector<vector<int>> &x) : x(x), n(x.size()), m(x[0].size()) { } 
+    Matrix(int r, int c) : x(r, vector <T> (c)), n(r), m(c) { }
+    Matrix(const vector<vector<T>> &x) : x(x), n(x.size()), m(x[0].size()) { }
 
-    
-    /*    a + b    */
     Matrix operator+ (const Matrix &b) {
         Matrix ans(m, n);
         for(int i = 0; i < m; i++) 
@@ -20,7 +18,6 @@ struct Matrix {
         return ans;
     }
 
-    /*    a * b    */
     Matrix operator* (const Matrix &b) {
         Matrix& a = *this;
         assert(a.m == b.n);
@@ -32,7 +29,6 @@ struct Matrix {
         return c;
     }
 
-    /*    a ^ b    */
     Matrix operator^ (int exp) {
         assert(n == m);
         Matrix base = *this;
@@ -42,12 +38,12 @@ struct Matrix {
             if (exp & 1) ans = ans * base;
         return ans;
     }
-};
 
-ostream& operator<< (ostream &out, const Matrix &d) {
-    for (auto a : d.x) {
-        for (auto b : a) out << b << ' ';
-        out << '\n';
+    friend ostream & operator << (ostream &out, const Matrix &d) {
+        for (auto a : d.x) {
+            for (auto b : a) out << b << ' ';
+            out << '\n';
+        }
+        return out;
     }
-    return out;
-}
+};

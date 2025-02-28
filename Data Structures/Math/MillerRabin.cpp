@@ -6,7 +6,7 @@ int binpow(int a, int b, int mod) {
 }
 
 bool checkComposite(int n, int a, int d, int s) {
-    int x = poww(a, d, n);
+    int x = binpow(a, d, n);
     if (x == 1 or x == n - 1) return 0;
 
     FOR(r, 1, s - 1) {

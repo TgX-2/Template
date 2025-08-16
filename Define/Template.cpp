@@ -1,6 +1,6 @@
 /*-----------------------------
         Author : TgX.2
-       11Ti - K28 - CHV
+       12Ti - K28 - CHV
 -----------------------------*/
 
 #include <bits/stdc++.h>
@@ -27,19 +27,6 @@ using   namespace std;
 
 #define ______________TgX______________ main()
 #define int                long long
-#define intmax             1e9
-#define intmin            -1e9
-#define llongmax           1e18
-#define llongmin          -1e18
-#define memo(a, val)       memset((a), (val), sizeof((a)))
-
-template<typename T1, typename T2> 
-bool mini(T1 &a, T2 b)
-    {if (a > b) a = b; else return 0; return 1;}
-
-template<typename T1, typename T2> 
-bool maxi(T1 &a, T2 b)
-    {if (a < b) a = b; else return 0; return 1;}
 /*-----------------------------*/
 
 

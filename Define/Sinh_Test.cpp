@@ -1,92 +1,56 @@
-/*-----------------------------
-        Author : TgX.2
-       11Ti - K28 - CHV
------------------------------*/
+#include<bits/stdc++.h>
+using namespace std;
 
-#include <bits/stdc++.h>
-using   namespace std;
+#define int long long
 
-#define FOR(i, a, b)       for (int i = (a), _b = (b); i <= _b; i += 1)
-#define FORD(i, a, b)      for (int i = (a), _b = (b); i >= _b; i -= 1)
+const int maxn = 1e6 + 7;
+string s; 
+int n, q;
 
-#define fi                 first
-#define se                 second
-#define pb                 push_back
-#define len(x)             (int)((x).size())
-#define all(x)             (x).begin(), (x).end()
+array<int, 3> seg[maxn << 2];
 
-#define _                  << " " <<
-#define __                 << "\n"
-#define ___                << " "
+array<int, 3> merge(const array<int, 3> &a, const array<int, 3> &b) {
+    int t = min(a[0], b[1]);
+    array<int, 3> ans = {0, 0, 0};
 
-#define ______________TgX______________ main()
-#define int                long long
-#define intmax             1e9
-#define intmin            -1e9
-#define llongmax           1e18
-#define llongmin          -1e18
-
-#define debug(args...) { string _s = #args; replace(_s.begin(), _s.end(), ',', ' '); stringstream _ss(_s); istream_iterator<string> _it(_ss); err(_it, args); cout << endl; }
-void err(istream_iterator<string> it) {}
-template<typename T, typename... Args>
-void err(istream_iterator<string> it, T a, Args... args) {
-    cout << "[ " << *it << " = " << a << " ] ";
-    err(++it, args...);
+    ans[2] = a[2] + b[2] + t;
+    ans[0] = a[0] + b[0] - t;
+    ans[1] = a[1] + b[1] - t;
 }
 
-template<typename T1, typename T2> ostream& operator << (ostream& out, const pair<T1, T2>& p) {
-    return out << "[ " << p.first << " , " << p.second << " ] ";
+void build(int id, int l, int r) {
+    if (l == r) return seg[id] = {s[id] == '(', s[id] == ')', 0}, void();
+    int mid = (l + r) >> 1;
+    build(id << 1, l, mid);
+    build(id << 1 | 1, mid + 1, r);
+    seg[id] = merge(seg[id << 1], seg[id << 1 | 1]);
 }
 
-template<class Con, class = decltype(begin(declval<Con>()))>
-typename enable_if<!is_same<Con, string>::value, ostream&>::type
-operator << (ostream& out, const Con& con) {
-    for (auto beg = con.begin(), it = beg; it != con.end(); it++) {
-        out << *it << " ";
+int get(int id, int l, int r, int u, int v) {
+    if (v < l or r < u) return 0;
+    if (u <= l and r <= v) return seg[id][0];
+    int mid = (l + r) >> 1;
+    return get(id << 1, l, mid, u, v) + get(id << 1 | 1, mid + 1, r, u, v);
+}
+
+main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    if (fopen("temp.inp", "r")) {
+        freopen("temp.inp", "r", stdin);
+        freopen("temp.out", "w", stdout);
     }
-    return out << "";
+
+    cin >> s;
+    n = (int)(s.size()); s = " " + s;
+    // build(1, 1, n);
+
+    // cin >> q;
+    // while(q--) {
+    //     int l, r; cin >> l >> r;
+    //     cout << get(1, 1, n, l, r) << "\n";
+    // }
+
+    cerr << "Time : " << clock() * 1.0 / CLOCKS_PER_SEC << " ms." << endl;
+    return 0;
 }
-/*-----------------------------*/
-
-int getint(int l, int r) {
-    int res = 0;
-    for(int i = 0; i <= 3; i++) 
-        res = (res << 15) ^ (rand() & ((1 << 15) - 1));
-    return l + rand() % (r - l + 1);
-}
-
-vector<int> getarr(int n, int l, int r) {
-    vector<int> a(n);
-    for(int &x : a) 
-        x = getint(l, r);
-    return a;
-}
-
-vector<int> getpermutation(int n) {
-    vector<int> a(n);
-    iota(all(a), 1);
-    random_shuffle(all(a));
-    return a;
-}
-
-
-/*-----------------------------*/
-______________TgX______________ {
-    srand(time(NULL));
-    freopen("result.txt", "w", stderr);
-    for(int itest = 1; itest <= 1000; itest++) {
-        ofstream inp("temp.inp");
-
-        inp.close();
-
-        system("temp.exe");
-        system("temp_trau.exe");
-        if (system("fc temp.ans temp.out") != 0) {
-            cerr << "Test " << itest << ": Wrong!"; 
-            return 0;
-        }
-        cerr << "Test " << itest << ": Right!" << "\n"; 
-        cerr << "---------------\n";
-    }
-}
-

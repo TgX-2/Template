@@ -1,47 +1,60 @@
 struct Trie {
     struct Node {
-        int child[27];
+        int child[30];
         int exist, cnt;
-    } node[26 * maxn];
+    } nodes[10000];
+
     int cur;
- 
-    void add(string s) {
+
+
+    void add(const string &s) {
         int pos = 0;
-        for(auto x : s) {
+
+        for(const char &x : s) {
             int c = x - 'a';
-            if(!node[pos].child[c]) node[pos].child[c] = ++cur;
-            pos = node[pos].child[c];
-            node[pos].cnt++;
+            if (nodes[pos].child[c] == 0) {
+                cur++;
+                nodes[pos].child[c] = cur;
+            }
+            pos = nodes[pos].child[c];
+            nodes[pos].cnt++;
         }
-        node[pos].exist++;
+        nodes[pos].exist++;
     }
- 
-    bool find(string s) {
+
+    bool find(const string &s) {
         int pos = 0;
-        for(auto x : s) {
+
+        for(const char &x : s) {
             int c = x - 'a';
-            if(!node[pos].child[c]) return 0;
-            pos = node[pos].child[c];
+            if (nodes[pos].child[c] == 0) return 0;
+            pos = nodes[pos].child[c];
         }
-        return (node[pos].exist != 0);	
+
+        return (nodes[pos].exist != 0);
     }
-    
-    bool delete_resc(int pos, string &s, int i) {
+
+    bool dele(int pos, const string &s, int i) {
         if (i != len(s)) {
             int c = s[i] - 'a';
-            bool is = delete_resc(node[pos].child[c], s, i + 1);
-            if (is) node[pos].child[c] = -1;
-        } else node[pos].exist--;
+            bool is = dele(nodes[pos].child[c], s, i + 1);
+            if (is) nodes[pos].child[c] = 0;
+        } else nodes[pos].exist--;
 
         if (pos != 0) {
-            node[pos].cnt--;
-            if (node[pos].cnt == 0) return 1;
+            nodes[pos].cnt--;
+            if (nodes[pos].cnt == 0) return 1;
         } else return 0;
     }
 
-    void delele(string s) {
+    void del(const string &s) {
         if (find(s) == 0) return;
-        delete_resc(0, s, 0);
+        dele(0, s, 0);
     }
 
-} trie;
+
+    Trie() : cur(0) {
+        memset(nodes[0].child, 0, sizeof(nodes[0].child));
+        nodes[0].exist = nodes[0].cnt = 0;
+    };
+};

@@ -4,7 +4,6 @@ void dfs(int u, int pre, int d) {
     fir[u] = len(euler);
     euler.pb(u);
     dep.pb(d);
-    h[u] = h[pre] + 1;
 
     for(const int &v : g[u]) if (v != pre) {
         dfs(v, u, d + 1);
@@ -13,18 +12,16 @@ void dfs(int u, int pre, int d) {
     }
 }
 
-int st[30][maxn << 1]; // nho nhan 2 maxn
+int st[30][maxn << 1];
 #define mmin(i, j) (dep[i] < dep[j] ? i : j)
 
-void buildst() {
-    int m = len(dep);
+void build() {
+    int m = len(euler);
     FOR(i, 0, m - 1) st[0][i] = i;
 
-    for(int j = 1; (1 << j) <= m; j++) {
-        for(int i = 0; i + (1 << j) + 1 <= m; i++) {
+    for(int j = 1; (1 << j) <= m; j++)
+        for(int i = 0; i + (1 << j) + 1 <= m; i++)
             st[j][i] = mmin(st[j - 1][i], st[j - 1][i + (1 << (j - 1))]);
-        }
-    }
 }
 
 int getst(int l, int r) {
@@ -38,6 +35,7 @@ int getlca(int u, int v) {
     if (l > r) swap(l, r);
     return euler[getst(l, r)];
 }
+
 
 /*
 Trong code main

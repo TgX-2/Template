@@ -1,23 +1,32 @@
-int cnt = 0, cau = 0, khop = 0;
-int num[maxn], low[maxn];
+int cnt = 0, scc = 0;
+int num[maxn], low[maxn], comp[maxn];
+bool in_stack[maxn];
+stack<int> st;
 
-void dfs(int u, int pre) {
-	num[u] = low[u] = ++cnt;
-	int node = (pre != 0);
+void dfs(int u) {
+    num[u] = low[u] = ++cnt;
+    st.push(u);
+    in_stack[u] = 1;
 
-	for(const int &v : g[u]) if (v != pre) {
-		if (num[v]) mini(low[u], num[v]);
-		else {
-			dfs(v, u);
-			mini(low[u], low[v]);
-			if (low[v] == num[v]) cau++;
-			if (low[v] >= num[u]) node++;
-		}
-	}
+    for (const int &v : g[u]) {
+        if (!num[v]) {
+            dfs(v);
+            low[u] = min(low[u], low[v]);
+        } else if (in_stack[v]) {
+            low[u] = min(low[u], num[v]);
+        }
+    }
 
-	if (node >= 2) khop++;
+    if (low[u] == num[u]) {
+        scc++;
+        while (true) {
+            int v = st.top(); st.pop();
+            in_stack[v] = false;
+            comp[v] = scc;
+            if (v == u) break;
+        }
+    }
 }
-
 
 /*
 Trong ham main:
